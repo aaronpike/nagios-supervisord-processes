@@ -57,10 +57,10 @@ class SuperVisorNagios
             $this->writeError("PHP extension ext/xmlrpc is needed but not found", self::NAGIOS_STATE_UNKNOWN);
         }
 
-        $getopt = getopt("h:x:u::p::");
+        $getopt = getopt("h:n:u::p::");
 
         if($_SERVER['argc'] < 4 ||  $getopt === false) {
-            $this->writeError("Wrong script usage : use -h <hostname> -x <pattern> -u <username> -p <password>", self::NAGIOS_STATE_UNKNOWN);
+            $this->writeError("Wrong script usage : use -h <hostname> -n <process name (pattern)> -u <username (Optional)> -p <password (Optional)>", self::NAGIOS_STATE_UNKNOWN);
         }
 
         $authentication = $getopt['u'].':'.$getopt['p'];
@@ -76,7 +76,7 @@ class SuperVisorNagios
         $this->streamContext = stream_context_create($streamOptions);
 
         $this->serverName  = $getopt['h'];
-        $this->grepPattern = preg_quote($getopt['x'], '/');
+        $this->grepPattern = preg_quote($getopt['n'], '/');
     }
 
     private function xmlRPCRequest($request, array $params = array())
